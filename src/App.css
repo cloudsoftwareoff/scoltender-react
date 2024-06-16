@@ -1,0 +1,52 @@
+/* Customized Bootstrap Styles */
+
+/* Colors */
+:root {
+  --primary: #00B074;
+  --secondary: #2B9BFF;
+  --light: #EFFDF5;
+  --dark: #2B3940;
+}
+
+/* Font Family */
+body {
+  font-family: 'Heebo', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Background and Text Colors */
+body {
+  background-color: var(--light);
+  color: #666565;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--dark);
+  font-weight: 700;
+}
+
+/* Other Variables */
+:root {
+  --headings-font-weight: 700;
+  --display-font-weight: 800;
+  --border-radius: 2px;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+
+/* Negative Margins (if applicable) */
+/* Use with caution as it might affect layout */
+/*.negative-margin {
+  margin-left: -10px;
+  margin-right: -10px;
+}*/
+
+/* Import Bootstrap Styles (if needed) */
+/* @import "bootstrap/scss/bootstrap"; */
