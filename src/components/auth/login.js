@@ -4,11 +4,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { auth } from "../../services/firebase";
 import { Button, TextField, CircularProgress } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 const Login = () => {
   const initialValues = { email: "", password: "" };
-
+  const navigate = useNavigate();
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email format").required("Required"),
     password: Yup.string()
@@ -20,6 +20,7 @@ const Login = () => {
     try {
       setSubmitting(true);
       await signInWithEmailAndPassword(auth, values.email, values.password);
+      navigate("/");
     } catch (error) {
       setErrors({ api: error.message });
     } finally {
