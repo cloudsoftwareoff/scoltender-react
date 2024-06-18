@@ -26,14 +26,14 @@ const About = () => {
           {/* Right Section with Text */}
           <div className="col-lg-6">
             <div className="about-content">
-              <h1 className="mb-4">Welcome to ScolTender</h1>
-              <p className="mb-4">ScolTender is an online marketplace connecting establishments looking to procure goods or services with contractors who can fulfill their needs. Establishments can post purchase opportunities, specifying what they need for their company or school, while contractors can browse these opportunities and submit competitive bids to win the contracts.</p>
+              <h1 className="mb-4">مرحبًا بكم في ScolTender</h1>
+              <p className="mb-4">ScolTender هو سوق إلكتروني يربط المؤسسات التي تسعى لشراء سلع أو خدمات مع المتعاقدين الذين يمكنهم تلبية احتياجاتهم. يمكن للمؤسسات نشر فرص الشراء، مع تحديد ما يحتاجونه لشركتهم أو مدرستهم، بينما يمكن للمتعاقدين تصفح هذه الفرص وتقديم عروض تنافسية للفوز بالعقود.</p>
               <ul className="list-unstyled">
-                <li><i className="fa fa-check text-primary me-2"></i> Establishments can easily post their procurement needs.</li>
-                <li><i className="fa fa-check text-primary me-2"></i> Contractors can browse and bid on posted opportunities.</li>
-                <li><i className="fa fa-check text-primary me-2"></i> Streamlined process from opportunity posting to contract award.</li>
+                <li><i className="fa fa-check text-primary me-2"></i> يمكن للمؤسسات نشر احتياجاتها من المشتريات بسهولة.</li>
+                <li><i className="fa fa-check text-primary me-2"></i> يمكن للمتعاقدين تصفح الفرص المنشورة وتقديم العطاءات.</li>
+                <li><i className="fa fa-check text-primary me-2"></i> عملية مبسطة من نشر الفرص إلى منح العقود.</li>
               </ul>
-              <a className="btn btn-primary py-3 px-5 mt-3" href="/">Explore Opportunities</a>
+              {/* <a className="btn btn-primary py-3 px-5 mt-3" href="/">استكشاف الفرص</a> */}
             </div>
           </div>
         </div>

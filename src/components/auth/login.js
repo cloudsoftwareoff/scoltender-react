@@ -4,16 +4,18 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { auth } from "../../services/firebase";
 import { Button, TextField, CircularProgress } from "@material-ui/core";
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 const Login = () => {
   const initialValues = { email: "", password: "" };
   const navigate = useNavigate();
+
   const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email format").required("Required"),
+    email: Yup.string().email("تنسيق البريد الإلكتروني غير صالح").required("مطلوب"),
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Required"),
+      .min(6, "يجب أن تكون كلمة المرور 6 أحرف على الأقل")
+      .required("مطلوب"),
   });
 
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
@@ -30,7 +32,7 @@ const Login = () => {
 
   return (
     <div className="auth-form">
-      <h1>Login</h1>
+      <h1>تسجيل الدخول</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -42,7 +44,7 @@ const Login = () => {
               <Field
                 name="email"
                 as={TextField}
-                label="Email"
+                label="البريد الإلكتروني"
                 fullWidth
                 variant="outlined"
                 helperText={<ErrorMessage name="email" />}
@@ -52,7 +54,7 @@ const Login = () => {
               <Field
                 name="password"
                 as={TextField}
-                label="Password"
+                label="كلمة المرور"
                 type="password"
                 fullWidth
                 variant="outlined"
@@ -68,11 +70,11 @@ const Login = () => {
                 disabled={isSubmitting}
                 fullWidth
               >
-                {isSubmitting ? <CircularProgress size={24} /> : "Login"}
+                {isSubmitting ? <CircularProgress size={24} /> : "تسجيل الدخول"}
               </Button>
             </div>
             <div className="form-field">
-              <Link to="/signup">Create an account</Link>
+              <Link to="/signup">إنشاء حساب جديد</Link>
             </div>
           </Form>
         )}

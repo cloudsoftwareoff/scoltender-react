@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { firestore } from '../services/firebase';
+import { auth, firestore } from '../services/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TextField, Chip, Paper } from '@material-ui/core';
@@ -9,6 +9,7 @@ const AddOpportunity = () => {
     title: '',
     description: '',
     budget: '',
+    createdBy:auth.currentUser.uid,
     endDate: '',
     tags: [],
   });
