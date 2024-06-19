@@ -1,7 +1,7 @@
 // src/components/HomePage.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import About from '../About';
+import About from './About';
 import Navbar from './NavBar';
 import Header from './Header';
 import Category from '../Category';

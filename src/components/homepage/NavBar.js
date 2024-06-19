@@ -20,7 +20,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
       <Link to="/" className="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-        <h1 className="m-0 text-primary">سكول تندر</h1>
+        <h1 className="m-0 text-primary">ScolTender</h1>
       </Link>
       <button
         type="button"
@@ -36,10 +36,10 @@ const Navbar = () => {
             الرئيسية
           </Link>
           <Link to="/about" className="nav-item nav-link">
-            عن الموقع
+          معلومات عنا
           </Link>
-          <Link to="/contact" className="nav-item nav-link">
-            اتصل بنا
+          <Link to="/admin" className="nav-item nav-link">
+          إدارة
           </Link>
         </div>
         {isLoggedIn ? (

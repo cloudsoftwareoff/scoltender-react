@@ -8,6 +8,8 @@ import DocumentUpload from './components/auth/DocumentUpload';
 import AccountWaitingVerification from './components/auth/AccountWaitingVerification';
 import BiddersPage from './components/homepage/offers/BidderPage';
 import AdminDashboard from './components/admin/AdminDashboard';
+import NotFound from './components/NotFound';
+import About from './components/homepage/About';
 
 const App = () => {
   return (
@@ -19,7 +21,9 @@ const App = () => {
       <Route path="/bidders/:offerId" element={<BiddersPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/sudo" element={<AdminDashboard />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="*" element={<NotFound />} />
       
       </Routes>
     </BrowserRouter>

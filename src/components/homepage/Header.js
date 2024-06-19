@@ -10,9 +10,9 @@ const Header = () => {
         <h1 className="display-3 text-white mb-3 animated slideInDown">ربط الاحتياجات بالحلول</h1>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb text-uppercase">
-            <li className="breadcrumb-item"><a href="/">انشر</a></li>
+            {/* <li className="breadcrumb-item"><a href="/">انشر</a></li>
             <li className="breadcrumb-item"><a href="/">قدم عرضًا</a></li>
-            <li className="breadcrumb-item text-white active" aria-current="page">افز</li>
+            <li className="breadcrumb-item text-white active" aria-current="page">افز</li> */}
           </ol>
         </nav>
       </div>
