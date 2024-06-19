@@ -19,7 +19,7 @@ const OfferItem = ({ offer }) => {
         if (auth.currentUser) {
           const userDoc = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
           if (userDoc.exists()) {
-            setUserData(userDoc.data().role);
+            setUserData(userDoc.data());
           }
         }
 
@@ -49,7 +49,7 @@ const OfferItem = ({ offer }) => {
     if (auth.currentUser) {
       fetchUserBid();
     }
-  }, [offer.id, offer.lowestBid]); // Add offer.lowestBid as a dependency
+  }, [offer.id, offer.lowestBid]); 
 
   const handleOpen = () => {
     if (auth.currentUser) {
@@ -95,7 +95,7 @@ const OfferItem = ({ offer }) => {
           <div className="text-start ps-4">
             <h5 className="mb-3">{offer.title}</h5>
             <div className="d-flex flex-wrap">
-              {offer.tags.map((tag, index) => (
+              {offer.tags && offer.tags.map((tag, index) => (
                 <Chip key={index} label={tag.trim()} className="me-2 mb-2" />
               ))}
             </div>
@@ -127,7 +127,11 @@ const OfferItem = ({ offer }) => {
                   <p>عرضك: ${userBid.amount}</p>
                 </div>
               ) : (
-                <Button variant="contained" color="primary" onClick={handleOpen}>تقديم عرض</Button>
+                userData && !userData.isVerified ? (
+                  <p>Unverified account</p>
+                ) : userData && userData.role === "contractor" ? (
+                  <Button variant="contained" color="primary" onClick={handleOpen}>تقديم عرض</Button>
+                ) : null
               )
             )}
           </div>

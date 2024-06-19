@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/auth/login';
 import Signup from './components/auth/signup';
-import Dashboard from './components/dashboard';
+import Dashboard from './components/userprofile/Dashboard';
 import HomePage from './components/homepage/HomePage';
 import DocumentUpload from './components/auth/DocumentUpload';
 import AccountWaitingVerification from './components/auth/AccountWaitingVerification';

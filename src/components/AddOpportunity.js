@@ -10,6 +10,7 @@ const AddOpportunity = () => {
     description: '',
     budget: '',
     createdBy:auth.currentUser.uid,
+        
     endDate: '',
     tags: [],
   });

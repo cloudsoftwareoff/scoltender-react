@@ -21,7 +21,8 @@ const Login = () => {
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       setSubmitting(true);
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential= await signInWithEmailAndPassword(auth, values.email, values.password);
+    const user = userCredential.user;
       navigate("/");
     } catch (error) {
       setErrors({ api: error.message });
