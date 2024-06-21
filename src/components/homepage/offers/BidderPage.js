@@ -51,25 +51,28 @@ const BiddersPage = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Bidders List</h1>
+      <h1 className="text-center mb-4">قائمة المزايدين</h1>
       {bidders.length > 0 ? (
         <ul className="list-group">
           {bidders.map((bidder) => (
             <li key={bidder.id} className="list-group-item">
               <div className="d-flex align-items-center">
-                <img src={bidder.bidderPfp} 
+                <img
+                  src={bidder.bidderPfp}
                   style={{ width: '150px', height: '150px' }}
-                className="rounded-circle profile-image" alt="Profile" />
+                  className="rounded-circle profile-image"
+                  alt="الصورة الشخصية"
+                />
                 <div className="ml-3">
                   <h5>{bidder.bidderName}</h5>
-                  <p>Amount: ${bidder.amount}</p>
+                  <p>المبلغ: {bidder.amount}د</p>
                 </div>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-center">No bids available</p>
+        <p className="text-center">لا توجد عروض متاحة</p>
       )}
     </div>
   );

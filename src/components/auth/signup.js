@@ -1,14 +1,13 @@
-// src/components/Auth/Signup.js
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { auth, firestore, storage } from "../../services/firebase";
-import { Button, CircularProgress } from "@material-ui/core";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { collection, doc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Button, Spinner, Alert } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -54,21 +53,39 @@ const Signup = () => {
       await uploadBytes(companyLicenseRef, values.companyLicense);
       const companyLicenseURL = await getDownloadURL(companyLicenseRef);
 
-      const usersCollectionRef = collection(firestore, 'users');
+      const usersCollectionRef = collection(firestore, "users");
       const userDocRef = doc(usersCollectionRef, user.uid);
       await setDoc(userDocRef, {
         uid: auth.currentUser.uid,
         name: values.name,
         email: values.email,
+        profileImageUrl:"https://i.pinimg.com/564x/b0/dc/a1/b0dca1538a110dd5ee860db55e6ea2e7.jpg",
         phoneNumber: values.phoneNumber,
         role: values.role,
         cinCardURL,
         companyLicenseURL,
         registeredAt: new Date(),
       });
-      navigate('/')
+      navigate("/");
     } catch (error) {
-      setErrors({ api: error.message });
+      let errorMessage = "";
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorMessage = "البريد الإلكتروني مستخدم بالفعل";
+          break;
+        case "auth/invalid-email":
+          errorMessage = "تنسيق البريد الإلكتروني غير صالح";
+          break;
+        case "auth/operation-not-allowed":
+          errorMessage = "تم تعطيل تسجيل الحسابات الجديدة";
+          break;
+        case "auth/weak-password":
+          errorMessage = "كلمة المرور ضعيفة جدًا";
+          break;
+        default:
+          errorMessage = "حدث خطأ ما. يرجى المحاولة مرة أخرى.";
+      }
+      setErrors({ api: errorMessage });
     } finally {
       setSubmitting(false);
     }
@@ -76,6 +93,10 @@ const Signup = () => {
 
   return (
     <div className="container mt-5">
+      <div className="row justify-content-center">
+      <div className="col-md-6">
+      <div className="card">
+      <div className="card-body">
       <h1 className="text-center mb-4">تسجيل جديد</h1>
       <Formik
         initialValues={initialValues}
@@ -83,9 +104,9 @@ const Signup = () => {
         onSubmit={onSubmit}
       >
         {({ isSubmitting, setFieldValue, errors }) => (
-          <Form className="form">
-            <div className="form-group mb-3">
-              <label htmlFor="email">البريد الإلكتروني</label>
+          <Form>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">البريد الإلكتروني</label>
               <Field
                 name="email"
                 type="email"
@@ -93,8 +114,8 @@ const Signup = () => {
               />
               <ErrorMessage name="email" component="div" className="text-danger" />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="password">كلمة المرور</label>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">كلمة المرور</label>
               <Field
                 name="password"
                 type="password"
@@ -102,8 +123,8 @@ const Signup = () => {
               />
               <ErrorMessage name="password" component="div" className="text-danger" />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="name">الاسم</label>
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">الاسم</label>
               <Field
                 name="name"
                 type="text"
@@ -111,8 +132,8 @@ const Signup = () => {
               />
               <ErrorMessage name="name" component="div" className="text-danger" />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="phoneNumber">رقم الهاتف</label>
+            <div className="mb-3">
+              <label htmlFor="phoneNumber" className="form-label">رقم الهاتف</label>
               <Field
                 name="phoneNumber"
                 type="text"
@@ -120,8 +141,8 @@ const Signup = () => {
               />
               <ErrorMessage name="phoneNumber" component="div" className="text-danger" />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="role">الدور</label>
+            <div className="mb-3">
+              <label htmlFor="role" className="form-label">الدور</label>
               <Field
                 name="role"
                 as="select"
@@ -132,50 +153,53 @@ const Signup = () => {
               </Field>
               <ErrorMessage name="role" component="div" className="text-danger" />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="cinCard">بطاقة CIN</label>
+            <div className="mb-3">
+              <label htmlFor="cinCard" className="form-label">بطاقة CIN</label>
               <input
                 name="cinCard"
                 type="file"
                 accept="image/jpeg, image/png, application/pdf"
-                className="form-control-file"
+                className="form-control"
                 onChange={(event) => {
                   setFieldValue("cinCard", event.currentTarget.files[0]);
                 }}
               />
               <ErrorMessage name="cinCard" component="div" className="text-danger" />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="companyLicense">رخصة الشركة</label>
+            <div className="mb-3">
+              <label htmlFor="companyLicense" className="form-label">رخصة الشركة</label>
               <input
                 name="companyLicense"
                 type="file"
                 accept="image/jpeg, image/png, application/pdf"
-                className="form-control-file"
+                className="form-control"
                 onChange={(event) => {
                   setFieldValue("companyLicense", event.currentTarget.files[0]);
                 }}
               />
               <ErrorMessage name="companyLicense" component="div" className="text-danger" />
             </div>
-            {errors.api && <div className="alert alert-danger">{errors.api}</div>}
-            <div className="form-group mb-3">
+            {errors.api && <Alert variant="danger">{errors.api}</Alert>}
+            <div className="d-grid">
               <Button
                 type="submit"
-                variant="contained"
-                color="primary"
+                variant="primary"
                 disabled={isSubmitting}
-                fullWidth
+                block
               >
-                {isSubmitting ? <CircularProgress size={24} /> : "تسجيل"}
+                {isSubmitting ? <Spinner animation="border" size="sm" /> : "تسجيل"}
               </Button>
             </div>
-            <div className="form-group text-center">
+            <div className="text-center">
               <Link to="/login">هل لديك حساب بالفعل؟ تسجيل الدخول</Link>
             </div>
           </Form>
         )}
       </Formik>
+      </div>
+      </div>
+      </div>
+      </div>
     </div>
   );
 };

@@ -4,12 +4,12 @@ import Login from './components/auth/login';
 import Signup from './components/auth/signup';
 import Dashboard from './components/userprofile/Dashboard';
 import HomePage from './components/homepage/HomePage';
-import DocumentUpload from './components/auth/DocumentUpload';
 import AccountWaitingVerification from './components/auth/AccountWaitingVerification';
 import BiddersPage from './components/homepage/offers/BidderPage';
 import AdminDashboard from './components/admin/AdminDashboard';
 import NotFound from './components/NotFound';
 import About from './components/homepage/About';
+import OfferDetail from './components/homepage/offers/OfferDetail';
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<About />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/offer/:offerId" element={<OfferDetail />} />
         <Route path="*" element={<NotFound />} />
       
       </Routes>

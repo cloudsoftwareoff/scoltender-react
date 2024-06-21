@@ -16,10 +16,10 @@ const BidsList = ({ bids }) => {
         {bids.map(bid => (
           <li key={bid.id} className="list-group-item">
             <h5>الفرصة: {bid.opportunity.title}</h5>
-            <p><strong>المبلغ:</strong> ${bid.amount}</p>
+            <p><strong>المبلغ:</strong> د {bid.amount}</p>
             <p><strong>التاريخ:</strong> {formatTimestamp(bid.timestamp)}</p>
             <p><strong>الوصف:</strong> {bid.opportunity.description}</p>
-            <p><strong>الميزانية:</strong> ${bid.opportunity.budget}</p>
+            <p><strong>الميزانية:</strong> د {bid.opportunity.budget}</p>
             <p><strong>تاريخ الانتهاء:</strong> {formatTimestamp(bid.opportunity.endDate)}</p>
           </li>
         ))}

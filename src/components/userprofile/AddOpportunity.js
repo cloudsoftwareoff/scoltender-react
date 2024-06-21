@@ -49,7 +49,7 @@ const AddOpportunity = ({ fetchOpportunities }) => {
   return (
     <div className="card mb-4">
       <div className="card-header">
-        <h3>Add Opportunity</h3>
+        <h3>إضافة فرصة</h3>
       </div>
       <div className="card-body">
         <form onSubmit={handleSubmit}>
@@ -57,7 +57,7 @@ const AddOpportunity = ({ fetchOpportunities }) => {
             <input
               type="text"
               className="form-control"
-              placeholder="Title"
+              placeholder="العنوان"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -66,7 +66,7 @@ const AddOpportunity = ({ fetchOpportunities }) => {
           <div className="mb-3">
             <textarea
               className="form-control"
-              placeholder="Description"
+              placeholder="الوصف"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
@@ -76,7 +76,7 @@ const AddOpportunity = ({ fetchOpportunities }) => {
             <input
               type="number"
               className="form-control"
-              placeholder="Budget"
+              placeholder="الميزانية"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               required
@@ -86,7 +86,7 @@ const AddOpportunity = ({ fetchOpportunities }) => {
             <input
               type="date"
               className="form-control"
-              placeholder="End Date"
+              placeholder="تاريخ الانتهاء"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               required
@@ -97,11 +97,11 @@ const AddOpportunity = ({ fetchOpportunities }) => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Add Tag"
+                placeholder="إضافة مواد"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
               />
-              <button className="btn btn-outline-secondary" type="button" onClick={handleAddTag}>Add</button>
+              <button className="btn btn-outline-secondary" type="button" onClick={handleAddTag}>أضف</button>
             </div>
             {tags.length > 0 && (
               <div className="mt-2">
@@ -114,7 +114,7 @@ const AddOpportunity = ({ fetchOpportunities }) => {
               </div>
             )}
           </div>
-          <button type="submit" className="btn btn-primary">Add Opportunity</button>
+          <button type="submit" className="btn btn-primary">إضافة فرصة</button>
         </form>
       </div>
     </div>

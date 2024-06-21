@@ -78,12 +78,12 @@ const AdminDashboard = () => {
       setVerifiedUsers([...verifiedUsers, { ...updatedUser, isVerified: true }]);
       setUnverifiedUsers(unverifiedUsers.filter((user) => user.id !== userId));
     } catch (error) {
-      console.error("Error verifying user:", error);
+      console.error("Error activating user account:", error);
     }
   };
 
   if (!isAdmin) {
-    return <div>Loading...</div>;
+    return <div>تحميل...</div>;
   }
 
   const renderUserTable = (users, title, isUnverified = false) => (
@@ -93,10 +93,10 @@ const AdminDashboard = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              {isUnverified && <th>Actions</th>}
+              <th>الاسم</th>
+              <th>البريد الإلكتروني</th>
+              <th>الدور</th>
+              {isUnverified && <th>الإجراءات</th>}
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@ const AdminDashboard = () => {
                       className="btn btn-success mr-2"
                       onClick={() => handleVerifyUser(user.id)}
                     >
-                      Verify
+                      تفعيل الحساب
                     </button>
                   </td>
                 )}
@@ -127,16 +127,16 @@ const AdminDashboard = () => {
           </tbody>
         </table>
       ) : (
-        <p className="text-center">No users available</p>
+        <p className="text-center">لا يوجد مستخدمين</p>
       )}
     </>
   );
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Admin Dashboard</h1>
-      {renderUserTable(verifiedUsers, "Verified Users")}
-      {renderUserTable(unverifiedUsers, "Unverified Users", true)}
+      <h1 className="text-center mb-4">لوحة إدارة النظام</h1>
+      {renderUserTable(verifiedUsers, "المستخدمين المفعّلين")}
+      {renderUserTable(unverifiedUsers, "المستخدمين غير المفعّلين", true)}
     </div>
   );
 };

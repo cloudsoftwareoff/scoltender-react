@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Button, TextField, Modal, Box, Chip } from '@material-ui/core';
-import { getDoc, doc, collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
-import { auth, firestore } from '../../../services/firebase';
-import { useNavigate, Link } from 'react-router-dom';
-import './style.css';
+import React, { useState, useEffect } from "react";
+import { Button, TextField, Modal, Box, Chip } from "@material-ui/core";
+import {
+  getDoc,
+  doc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { auth, firestore } from "../../../services/firebase";
+import { useNavigate, Link } from "react-router-dom";
+import "./style.css";
 
 const OfferItem = ({ offer }) => {
   const [open, setOpen] = useState(false);
-  const [bidAmount, setBidAmount] = useState('');
+  const [bidAmount, setBidAmount] = useState("");
   const [userBid, setUserBid] = useState(null);
   const [userData, setUserData] = useState(null);
   const [lowestBidderName, setLowestBidderName] = useState(null);
@@ -17,16 +26,18 @@ const OfferItem = ({ offer }) => {
     const fetchUserBid = async () => {
       try {
         if (auth.currentUser) {
-          const userDoc = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+          const userDoc = await getDoc(
+            doc(firestore, "users", auth.currentUser.uid)
+          );
           if (userDoc.exists()) {
             setUserData(userDoc.data());
           }
         }
 
         const bidsQuery = query(
-          collection(firestore, 'bids'),
-          where('offerId', '==', offer.id),
-          where('bidder', '==', auth.currentUser.uid)
+          collection(firestore, "bids"),
+          where("offerId", "==", offer.id),
+          where("bidder", "==", auth.currentUser.uid)
         );
         const bidsSnapshot = await getDocs(bidsQuery);
         if (!bidsSnapshot.empty) {
@@ -34,9 +45,10 @@ const OfferItem = ({ offer }) => {
           setUserBid(userBidData);
         }
 
-        // Fetch lowest bidder's name
         if (offer.lowestBid) {
-          const bidderDoc = await getDoc(doc(firestore, 'users', offer.lowestBid.bidder));
+          const bidderDoc = await getDoc(
+            doc(firestore, "users", offer.lowestBid.bidder)
+          );
           if (bidderDoc.exists()) {
             setLowestBidderName(bidderDoc.data().name);
           }
@@ -49,13 +61,13 @@ const OfferItem = ({ offer }) => {
     if (auth.currentUser) {
       fetchUserBid();
     }
-  }, [offer.id, offer.lowestBid]); 
+  }, [offer.id, offer.lowestBid]);
 
   const handleOpen = () => {
     if (auth.currentUser) {
       setOpen(true);
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   };
 
@@ -71,12 +83,12 @@ const OfferItem = ({ offer }) => {
         timestamp: serverTimestamp(),
       };
 
-      await addDoc(collection(firestore, 'bids'), newBid);
+      await addDoc(collection(firestore, "bids"), newBid);
       setUserBid(newBid);
-      setBidAmount('');
+      setBidAmount("");
       handleClose();
     } catch (error) {
-      console.error('Error submitting bid:', error);
+      console.error("Error submitting bid:", error);
     }
   };
 
@@ -90,52 +102,72 @@ const OfferItem = ({ offer }) => {
             className="flex-shrink-0 img-fluid border rounded"
             src={offer.createdBy.profileImageUrl}
             alt=""
-            style={{ width: '80px', height: '80px' }}
+            style={{ width: "80px", height: "80px" }}
           />
           <div className="text-start ps-4">
             <h5 className="mb-3">{offer.title}</h5>
             <div className="d-flex flex-wrap">
-              {offer.tags && offer.tags.map((tag, index) => (
-                <Chip key={index} label={tag.trim()} className="me-2 mb-2" />
-              ))}
+              {offer.tags &&
+                offer.tags.map((tag, index) => (
+                  <Chip key={index} label={tag.trim()} className="me-2 mb-2" />
+                ))}
             </div>
           </div>
         </div>
         <div className="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
           <div className="d-flex mb-3">
-            <a className="btn btn-light btn-square me-3" href="/"><i className="far fa-heart text-primary"></i></a>
             {hasEnded ? (
               offer.lowestBid ? (
                 <div>
-                  <p>أقل عرض: ${offer.lowestBid.amount}</p>
-                  <p>الفائز: {lowestBidderName}</p>
-                  <Button
-                    component={Link}
-                    to={`/bidders/${offer.id}`}
-                    variant="contained"
-                    color="primary"
-                  >
-                    عرض العروض
-                  </Button>
+                  <div className="row">
+                  <div className="col-md-6">
+                      <Button
+                        component={Link}
+                        to={`/bidders/${offer.id}`}
+                        variant="contained"
+                        color="primary"
+                      >
+                        عرض العروض
+                      </Button>
+                    </div>
+                    <div className="col-md-6">
+                      <p className="mb-0">أقل عرض: {offer.lowestBid.amount}د</p>
+                    </div>
+                    <div className="col-md-6">
+                      <p className="mb-0">الفائز: {lowestBidderName}</p>
+                    </div>
+                  
+                  </div>
                 </div>
               ) : (
                 <p>لا توجد عروض متاحة</p>
               )
-            ) : (
-              userBid ? (
-                <div>
-                  <p>عرضك: ${userBid.amount}</p>
-                </div>
-              ) : (
-                userData && !userData.isVerified ? (
-                  <p>Unverified account</p>
-                ) : userData && userData.role === "contractor" ? (
-                  <Button variant="contained" color="primary" onClick={handleOpen}>تقديم عرض</Button>
-                ) : null
-              )
-            )}
+            ) : userBid ? (
+              <div>
+                <p>عرضك: {userBid.amount}د</p>
+              </div>
+            ) : userData && !userData.isVerified ? (
+              <p>Unverified account</p>
+            ) : userData && userData.role === "contractor" ? (
+              <Button variant="contained" color="primary" onClick={handleOpen}>
+                تقديم عرض
+              </Button>
+            ) : null}
           </div>
-          <small className="text-truncate"><i className="far fa-calendar-alt text-primary me-2"></i>تاريخ الانتهاء: {offer.endDate.toLocaleDateString()}</small>
+          {!hasEnded && (
+            <small className="text-truncate">
+              <i className="far fa-calendar-alt text-primary me-2"></i>تاريخ
+              الانتهاء: {offer.endDate.toLocaleDateString()}
+            </small>
+          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate(`/offer/${offer.id}`)}
+            className="mt-3"
+          >
+            عرض المزيد
+          </Button>
         </div>
       </div>
       <Modal open={open} onClose={handleClose}>
@@ -154,8 +186,17 @@ const OfferItem = ({ offer }) => {
               />
             </div>
             <div className="form-group d-flex justify-content-end">
-              <Button variant="contained" color="secondary" onClick={handleClose} style={{ marginRight: '10px' }}>إلغاء</Button>
-              <Button type="submit" variant="contained" color="primary">تقديم العرض</Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleClose}
+                style={{ marginRight: "10px" }}
+              >
+                إلغاء
+              </Button>
+              <Button type="submit" variant="contained" color="primary">
+                تقديم العرض
+              </Button>
             </div>
           </form>
         </Box>
