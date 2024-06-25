@@ -18,6 +18,7 @@ const Navbar = () => {
   }, []);
 
   return (
+    
     <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
       <Link to="/" className="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
         <h1 className="m-0 text-primary">ScolTender</h1>
@@ -53,6 +54,7 @@ const Navbar = () => {
         )}
       </div>
     </nav>
+ 
   );
 };
 

@@ -78,7 +78,9 @@ const Dashboard = () => {
       </div>
     );
   }
-
+if(!userData.isVerified){
+  return <AccountWaitingVerification/>
+}
   return (
     <div className="container py-5">
       <div className="row mb-4">
@@ -87,40 +89,38 @@ const Dashboard = () => {
         </div>
         <div className="col-md-8">
           {userData.role === 'establishment' ? (
-            <>
-              {userData.isVerified != null && userData.isVerified === true ? (
-                <>
-                  <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                      <button
-                        className={`nav-link ${activeTab === 'addOpportunity' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('addOpportunity')}
-                      >
-                       إضافة فرصة
-                      </button>
-                    </li>
-                    <li className="nav-item">
-                      <button
-                        className={`nav-link ${activeTab === 'opportunitiesList' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('opportunitiesList')}
-                      >
-                       الفرص
-                      </button>
-                    </li>
-                  </ul>
-                  <div className="tab-content mt-3">
-                    {activeTab === 'addOpportunity' && (
-                      <AddOpportunity fetchOpportunities={() => fetchOpportunities(userData.uid != null ? userData.uid : user.uid)} />
-                    )}
-                    {activeTab === 'opportunitiesList' && (
-                      <OpportunitiesList opportunities={opportunities} />
-                    )}
-                  </div>
-                </>
-              ) : (
-                <AccountWaitingVerification />
-              )}
-            </>
+            userData.isVerified ? (
+              <>
+                <ul className="nav nav-tabs">
+                  <li className="nav-item">
+                    <button
+                      className={`nav-link ${activeTab === 'addOpportunity' ? 'active' : ''}`}
+                      onClick={() => setActiveTab('addOpportunity')}
+                    >
+                     إضافة فرصة
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className={`nav-link ${activeTab === 'opportunitiesList' ? 'active' : ''}`}
+                      onClick={() => setActiveTab('opportunitiesList')}
+                    >
+                     الفرص
+                    </button>
+                  </li>
+                </ul>
+                <div className="tab-content mt-3">
+                  {activeTab === 'addOpportunity' && (
+                    <AddOpportunity fetchOpportunities={() => fetchOpportunities(userData.uid != null ? userData.uid : user.uid)} />
+                  )}
+                  {activeTab === 'opportunitiesList' && (
+                    <OpportunitiesList opportunities={opportunities} />
+                  )}
+                </div>
+              </>
+            ) : (
+              <AccountWaitingVerification />
+            )
           ) : (
             <BidsList bids={bids} />
           )}

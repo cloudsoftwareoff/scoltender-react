@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { auth, firestore } from '../../services/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, firestore, storage } from '../../services/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const AddOpportunity = ({ fetchOpportunities }) => {
   const [title, setTitle] = useState('');
@@ -9,24 +10,36 @@ const AddOpportunity = ({ fetchOpportunities }) => {
   const [endDate, setEndDate] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [photo, setPhoto] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(firestore, 'opportunities'), {
+      let photoURL = '';
+      if (photo) {
+        const photoRef = ref(storage, `opportunities/${photo.name}`);
+        await uploadBytes(photoRef, photo);
+        photoURL = await getDownloadURL(photoRef);
+      }
+
+      await addDoc(collection(firestore, 'opportunities'), {
         title,
         description,
         budget: parseFloat(budget),
         endDate: new Date(endDate),
         createdBy: auth.currentUser.uid,
-        tags: tags.map(tag => tag.toLowerCase().trim())
+        tags: tags.map(tag => tag.toLowerCase().trim()),
+        photoURL,
+        createdAt: serverTimestamp()
       });
+
       setTitle('');
       setDescription('');
       setBudget('');
       setEndDate('');
       setTags([]);
       setTagInput('');
+      setPhoto(null);
       fetchOpportunities();
     } catch (error) {
       console.error('Error adding opportunity:', error);
@@ -113,6 +126,16 @@ const AddOpportunity = ({ fetchOpportunities }) => {
                 ))}
               </div>
             )}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="photo" className="form-label">صورة الفرصة</label>
+            <input
+              type="file"
+              className="form-control"
+              id="photo"
+              accept="image/*"
+              onChange={(e) => setPhoto(e.target.files[0])}
+            />
           </div>
           <button type="submit" className="btn btn-primary">إضافة فرصة</button>
         </form>

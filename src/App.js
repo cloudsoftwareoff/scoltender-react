@@ -10,6 +10,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import NotFound from './components/NotFound';
 import About from './components/homepage/About';
 import OfferDetail from './components/homepage/offers/OfferDetail';
+import AboutUsPage from './components/about/AboutUsPage';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
       <Route path="/bidders/:offerId" element={<BiddersPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<AboutUsPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/offer/:offerId" element={<OfferDetail />} />
         <Route path="*" element={<NotFound />} />

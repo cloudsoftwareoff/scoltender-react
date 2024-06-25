@@ -95,17 +95,21 @@ const OfferItem = ({ offer }) => {
   const hasEnded = new Date() > offer.endDate;
 
   return (
+   
     <div className="job-item p-4 mb-4">
       <div className="row g-4">
         <div className="col-sm-12 col-md-8 d-flex align-items-center">
           <img
             className="flex-shrink-0 img-fluid border rounded"
-            src={offer.createdBy.profileImageUrl}
+            src={offer.photoURL !=null ? offer.photoURL : offer.createdBy.profileImageUrl}
             alt=""
             style={{ width: "80px", height: "80px" }}
           />
-          <div className="text-start ps-4">
-            <h5 className="mb-3">{offer.title}</h5>
+          <div className="text-right ps-4 ">
+          <h5 className="mb-3 pr-3">  {offer.title}   </h5>
+{/* <h6 className="mb-2 pr-2">  {offer.description}   </h6> */}
+
+
             <div className="d-flex flex-wrap">
               {offer.tags &&
                 offer.tags.map((tag, index) => (
@@ -202,6 +206,7 @@ const OfferItem = ({ offer }) => {
         </Box>
       </Modal>
     </div>
+   
   );
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 
 const OfferTab = ({ activeTab, handleTabChange }) => {
   return (
+    
     <ul className="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
       <li className="nav-item">
         <a className={`d-flex align-items-center text-start mx-3 ms-0 pb-3 ${activeTab === 'tab-1' ? 'active' : ''}`} 

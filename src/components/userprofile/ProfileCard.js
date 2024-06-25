@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
-import { firestore } from '../../services/firebase';
+import { firestore, storage } from '../../services/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const ProfileCard = ({ userData, setUserData, handleLogout }) => {
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState(userData);
+  const [formData, setFormData] = useState({ ...userData });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(userData.profileImageUrl || '');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -17,12 +20,31 @@ const ProfileCard = ({ userData, setUserData, handleLogout }) => {
   const handleEditProfile = async (e) => {
     e.preventDefault();
     try {
+      // Update profile data
       await updateDoc(doc(firestore, 'users', userData.uid), formData);
       setUserData(formData);
+
+      // If a new profile picture is selected, upload it
+      if (selectedFile) {
+        const photoRef = ref(storage, `profiles/${userData.uid}/${selectedFile.name}`);
+        await uploadBytes(photoRef, selectedFile);
+        const photoURL = await getDownloadURL(photoRef);
+        setPhotoUrl(photoURL);
+        setFormData({
+          ...formData,
+          profileImageUrl: photoURL,
+        });
+      }
+
       setEditMode(false);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
   };
 
   const formatTimestamp = (timestamp) => {
@@ -35,7 +57,7 @@ const ProfileCard = ({ userData, setUserData, handleLogout }) => {
     <div className="card text-center">
       <div className="card-body">
         <img
-          src={userData.profileImageUrl}
+          src={photoUrl || 'default-profile-pic-url'}
           className="rounded-circle mb-3"
           alt="الملف الشخصي"
           style={{ width: '150px', height: '150px' }}
@@ -76,14 +98,13 @@ const ProfileCard = ({ userData, setUserData, handleLogout }) => {
               />
             </div>
             <div className="mb-3">
+              <label htmlFor="profilePic" className="form-label">اختر صورة الملف الشخصي</label>
               <input
-                type="text"
-                name="profileImageUrl"
+                type="file"
                 className="form-control"
-                value={formData.profileImageUrl}
-                onChange={handleInputChange}
-                placeholder="رابط صورة الملف الشخصي"
-                required
+                id="profilePic"
+                accept="image/*"
+                onChange={handleFileChange}
               />
             </div>
             <button type="submit" className="btn btn-primary">حفظ</button>
@@ -91,11 +112,11 @@ const ProfileCard = ({ userData, setUserData, handleLogout }) => {
           </form>
         ) : (
           <>
-            <h5 className="card-title">{userData.name}</h5>
-            <h6 className="card-subtitle mb-2 text-muted">{userData.role}: الدور </h6>
-            <p className="card-text"> {userData.email}:<strong>البريد الإلكتروني</strong></p>
-            <p className="card-text"> {userData.phoneNumber}:<strong>رقم الهاتف</strong></p>
-            <p className="card-text">{formatTimestamp(userData.registeredAt)}:<strong>تاريخ التسجيل</strong> </p>
+            <h5 className="card-title">{formData.name}</h5>
+            <h6 className="card-subtitle mb-2 text-muted"><strong>الدور :</strong> {userData.role === 'contractor' ? 'مزود' : 'مؤسسة'}</h6>
+            <p className="card-text"><strong>البريد الإلكتروني:</strong> {formData.email}</p>
+            <p className="card-text"><strong>رقم الهاتف:</strong> {formData.phoneNumber}</p>
+            <p className="card-text"><strong>تاريخ التسجيل:</strong> {formatTimestamp(userData.registeredAt)} </p>
             <button className="btn btn-primary" onClick={() => setEditMode(true)}>تعديل الملف الشخصي</button>
             <button className="btn btn-danger" onClick={handleLogout}>تسجيل الخروج</button>
           </>

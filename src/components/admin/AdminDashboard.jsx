@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { collection, getDocs, doc, updateDoc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "../../services/firebase";
 import './AdminDashboard.css';
+import Navbar from "../homepage/NavBar";
 
 const AdminDashboard = () => {
-  const [verifiedUsers, setVerifiedUsers] = useState([]);
-  const [unverifiedUsers, setUnverifiedUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
@@ -37,23 +37,12 @@ const AdminDashboard = () => {
     const fetchUsers = async () => {
       try {
         const usersSnapshot = await getDocs(collection(firestore, "users"));
-        const verifiedList = [];
-        const unverifiedList = [];
+        const userList = usersSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-        usersSnapshot.forEach((doc) => {
-          const userData = {
-            id: doc.id,
-            ...doc.data(),
-          };
-          if (userData.isVerified) {
-            verifiedList.push(userData);
-          } else {
-            unverifiedList.push(userData);
-          }
-        });
-
-        setVerifiedUsers(verifiedList);
-        setUnverifiedUsers(unverifiedList);
+        setUsers(userList);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
@@ -70,15 +59,16 @@ const AdminDashboard = () => {
     return () => unsubscribe();
   }, [isAdmin, navigate]);
 
-  const handleVerifyUser = async (userId) => {
+  const handleVerifyUser = async (userId, verifyStatus) => {
     try {
       const userRef = doc(firestore, "users", userId);
-      await updateDoc(userRef, { isVerified: true });
-      const updatedUser = unverifiedUsers.find((user) => user.id === userId);
-      setVerifiedUsers([...verifiedUsers, { ...updatedUser, isVerified: true }]);
-      setUnverifiedUsers(unverifiedUsers.filter((user) => user.id !== userId));
+      await updateDoc(userRef, { isVerified: verifyStatus });
+
+      setUsers(users.map(user =>
+        user.id === userId ? { ...user, isVerified: verifyStatus } : user
+      ));
     } catch (error) {
-      console.error("Error activating user account:", error);
+      console.error("Error updating user account:", error);
     }
   };
 
@@ -86,17 +76,23 @@ const AdminDashboard = () => {
     return <div>تحميل...</div>;
   }
 
-  const renderUserTable = (users, title, isUnverified = false) => (
-    <>
-      <h2 className="text-center mb-4">{title}</h2>
-      {users.length > 0 ? (
+  return (
+<div>
+      <Navbar />
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">لوحة إدارة النظام</h1>
+      <h2 className="text-center mb-4">المستخدمين</h2>
+      {loading ? (
+        <p className="text-center">جاري التحميل...</p>
+      ) : (
         <table className="table table-striped">
           <thead>
             <tr>
               <th>الاسم</th>
               <th>البريد الإلكتروني</th>
               <th>الدور</th>
-              {isUnverified && <th>الإجراءات</th>}
+              <th>الحالة</th>
+              <th>الإجراءات</th>
             </tr>
           </thead>
           <tbody>
@@ -112,31 +108,30 @@ const AdminDashboard = () => {
                 </td>
                 <td>{user.email}</td>
                 <td>{user.role}</td>
-                {isUnverified && (
-                  <td>
+                <td>{user.isVerified ? "مفعل" : "غير مفعل"}</td>
+                <td>
+                  {user.isVerified ? (
+                    <button
+                      className="btn btn-danger mr-2"
+                      onClick={() => handleVerifyUser(user.id, false)}
+                    >
+                      إلغاء التفعيل
+                    </button>
+                  ) : (
                     <button
                       className="btn btn-success mr-2"
-                      onClick={() => handleVerifyUser(user.id)}
+                      onClick={() => handleVerifyUser(user.id, true)}
                     >
                       تفعيل الحساب
                     </button>
-                  </td>
-                )}
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-      ) : (
-        <p className="text-center">لا يوجد مستخدمين</p>
       )}
-    </>
-  );
-
-  return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">لوحة إدارة النظام</h1>
-      {renderUserTable(verifiedUsers, "المستخدمين المفعّلين")}
-      {renderUserTable(unverifiedUsers, "المستخدمين غير المفعّلين", true)}
+    </div>
     </div>
   );
 };

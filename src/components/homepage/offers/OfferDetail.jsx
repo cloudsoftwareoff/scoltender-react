@@ -42,7 +42,9 @@ const OfferDetail = () => {
   }
 
   return (
-    <div className="offer-detail-container container mt-5">
+
+   
+    <div className="offer-detail-container container mt-5 right">
       <Button variant="primary" onClick={() => navigate(-1)}>العودة</Button>
       <Card className="mt-3">
         <Card.Header>
@@ -50,11 +52,11 @@ const OfferDetail = () => {
         </Card.Header>
         <Card.Body>
           <Card.Text>
-          {offer.description} <strong>:الوصف</strong>
+     <strong>الوصف:</strong>      {offer.description}
           </Card.Text>
-          <Card.Text>
+          {/* <Card.Text>
             <strong>الميزانية:</strong> {offer.budget}د
-          </Card.Text>
+          </Card.Text> */}
           <Card.Text>
             <strong>تاريخ الانتهاء:</strong> {offer.endDate.toDate().toLocaleDateString()}
           </Card.Text>
@@ -63,7 +65,7 @@ const OfferDetail = () => {
               <Badge key={index} variant="secondary" className="me-2 mb-2">{tag.trim()}</Badge>
             ))}
           </div>
-          <h3>معلومات المنشئ</h3>
+          <h3>معلومات عن المنشئ</h3>
           <img
             src={creator.profileImageUrl}
             alt="الملف الشخصي"
@@ -71,10 +73,10 @@ const OfferDetail = () => {
             style={{ width: '100px', height: '100px' }}
           />
           <Card.Text>
-          {creator.name} <strong>:الاسم</strong> 
+          <strong>الاسم:</strong>  {creator.name}
           </Card.Text>
           <Card.Text>
-          {creator.email} <strong>:البريد الإلكتروني</strong> 
+          <strong>البريد الإلكتروني:</strong> {creator.email} 
           </Card.Text>
           <Card.Text>
             <strong>الهاتف:</strong> {creator.phoneNumber}
@@ -83,6 +85,7 @@ const OfferDetail = () => {
         </Card.Body>
       </Card>
     </div>
+   
   );
 };
 
