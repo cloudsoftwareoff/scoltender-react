@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth, firestore } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
-import { doc as firestoreDoc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { doc as firestoreDoc, getDoc, collection, getDocs, query, where, updateDoc, deleteDoc } from 'firebase/firestore';
 import AddOpportunity from './AddOpportunity';
 import ProfileCard from './ProfileCard';
 import OpportunitiesList from './OpportunitiesList';
@@ -64,6 +64,23 @@ const Dashboard = () => {
     setBids(bidsList);
   };
 
+  const handleEditBid = async (bidId) => {
+    const newAmount = prompt('Enter the new bid amount:');
+    if (newAmount) {
+      const bidDocRef = firestoreDoc(firestore, 'bids', bidId);
+      await updateDoc(bidDocRef, { amount: parseFloat(newAmount) });
+      setBids(prevBids => prevBids.map(bid => bid.id === bidId ? { ...bid, amount: parseFloat(newAmount) } : bid));
+    }
+  };
+
+  const handleDeleteBid = async (bidId) => {
+    const confirmDelete = window.confirm('هل أنت متأكد أنك تريد حذف هذا العرض؟');
+    if (confirmDelete) {
+      await deleteDoc(firestoreDoc(firestore, 'bids', bidId));
+      setBids(prevBids => prevBids.filter(bid => bid.id !== bidId));
+    }
+  };
+
   const handleLogout = () => {
     auth.signOut();
     navigate('/login');
@@ -78,9 +95,11 @@ const Dashboard = () => {
       </div>
     );
   }
-if(!userData.isVerified){
-  return <AccountWaitingVerification/>
-}
+
+  if (!userData.isVerified) {
+    return <AccountWaitingVerification />;
+  }
+
   return (
     <div className="container py-5">
       <div className="row mb-4">
@@ -89,40 +108,36 @@ if(!userData.isVerified){
         </div>
         <div className="col-md-8">
           {userData.role === 'establishment' ? (
-            userData.isVerified ? (
-              <>
-                <ul className="nav nav-tabs">
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${activeTab === 'addOpportunity' ? 'active' : ''}`}
-                      onClick={() => setActiveTab('addOpportunity')}
-                    >
-                     إضافة فرصة
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${activeTab === 'opportunitiesList' ? 'active' : ''}`}
-                      onClick={() => setActiveTab('opportunitiesList')}
-                    >
-                     الفرص
-                    </button>
-                  </li>
-                </ul>
-                <div className="tab-content mt-3">
-                  {activeTab === 'addOpportunity' && (
-                    <AddOpportunity fetchOpportunities={() => fetchOpportunities(userData.uid != null ? userData.uid : user.uid)} />
-                  )}
-                  {activeTab === 'opportunitiesList' && (
-                    <OpportunitiesList opportunities={opportunities} />
-                  )}
-                </div>
-              </>
-            ) : (
-              <AccountWaitingVerification />
-            )
+            <>
+              <ul className="nav nav-tabs">
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${activeTab === 'addOpportunity' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('addOpportunity')}
+                  >
+                    إضافة فرصة
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${activeTab === 'opportunitiesList' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('opportunitiesList')}
+                  >
+                    الفرص
+                  </button>
+                </li>
+              </ul>
+              <div className="tab-content mt-3">
+                {activeTab === 'addOpportunity' && (
+                  <AddOpportunity fetchOpportunities={() => fetchOpportunities(userData.uid != null ? userData.uid : user.uid)} />
+                )}
+                {activeTab === 'opportunitiesList' && (
+                  <OpportunitiesList opportunities={opportunities} />
+                )}
+              </div>
+            </>
           ) : (
-            <BidsList bids={bids} />
+            <BidsList bids={bids} onEditBid={handleEditBid} onDeleteBid={handleDeleteBid} />
           )}
         </div>
       </div>

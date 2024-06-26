@@ -36,12 +36,16 @@ const OpportunitiesList = ({ opportunities }) => {
   };
 
   const handleDeleteClick = async (opportunityId) => {
+    const confirmDelete = window.confirm('هل أنت متأكد أنك تريد حذف هذا ');
+  if(confirmDelete){
+
     try {
       await deleteDoc(firestoreDoc(firestore, 'opportunities', opportunityId));
       window.location.reload();
     } catch (error) {
       console.error('Error deleting opportunity:', error);
     }
+  }
   };
 
   const handleEditChange = (e) => {
