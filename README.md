@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# React Firebase Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a React application that integrates Firebase for authentication, Firestore for database operations, and Firebase Storage for file uploads. The application allows users to create and manage opportunities and update their profile information.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Firebase Configuration](#firebase-configuration)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User Authentication (Login/Logout)
+- Profile Management
+- Opportunity Listing
+- Adding New Opportunities
+- Uploading and Displaying Profile Pictures
+- Filtering and Sorting Opportunities
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. Clone the repository:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    ```sh
+    git clone https://github.com/cloudsoftwareoff/scoltender-react
+    cd scoltender-react
+    ```
 
-### `npm run build`
+2. Install dependencies:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    ```sh
+    npm install
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create a `firebase.js` file service folder
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   
+    ```
 
-### `npm run eject`
+4. Start the development server:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    ```sh
+    npm start
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Authentication
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Users can log in and log out using their email and password.
 
-## Learn More
+### Profile Management
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Users can update their profile information, including uploading a profile picture.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Opportunity Management
 
-### Code Splitting
+Users can view a list of opportunities, add new opportunities, and filter opportunities based on their status (active or ended).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Firebase Configuration
 
-### Analyzing the Bundle Size
+Ensure you have a Firebase project set up with Firestore and Storage enabled.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Firestore Structure
 
-### Making a Progressive Web App
+- **users**: Collection to store user profiles.
+  - **uid**: Document ID (user ID).
+    - **name**: User's name.
+    - **email**: User's email.
+    - **phoneNumber**: User's phone number.
+    - **profileImageUrl**: URL to the user's profile image.
+    - **role**: User's role (e.g., contractor, institution).
+    - **registeredAt**: Timestamp of user registration.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **opportunities**: Collection to store opportunities.
+  - **id**: Document ID.
+    - **title**: Title of the opportunity.
+    - **description**: Description of the opportunity.
+    - **budget**: Budget for the opportunity.
+    - **endDate**: End date of the opportunity.
+    - **createdBy**: User ID of the creator.
+    - **tags**: Tags associated with the opportunity.
+    - **photoURL**: URL to the opportunity's image.
+    - **createdAt**: Timestamp of creation.
 
-### Advanced Configuration
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    ├── public
+    │   ├── index.html
+    │   └── ...
+    ├── src
+    │   ├── components
+    │   │   ├── ProfileCard.js
+    │   │   ├── AddOpportunity.js
+    │   │   └── ...
+    │   ├── services
+    │   │   └── firebase.js
+    │   ├── App.js
+    │   ├── index.js
+    │   └── ...
+    ├── .env
+    ├── package.json
+    └── README.md
 
-### Deployment
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Contributions are welcome! Please open an issue or submit a pull request.
 
-### `npm run build` fails to minify
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
