@@ -98,10 +98,10 @@ const AdminDashboard = () => {
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td>
+                <td className="pr-3 text-right">
                   <img
                     src={user.profileImageUrl}
-                    className="rounded-circle admin-profile-image"
+                    className="p-1 rounded-circle admin-profile-image"
                     alt="Profile"
                   />
                   {user.name}

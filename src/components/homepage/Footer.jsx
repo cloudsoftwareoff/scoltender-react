@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container py-5">
         <div className="row g-5">
           <div className="col-lg-3 col-md-6">
-            <h5 className="text-white mb-4">الشركة</h5>
+            <h5 className="text-white mb-4">الشركة </h5>
             <a className="btn btn-link text-white-50" href="">معلومات عنا</a>
             <a className="btn btn-link text-white-50" href="">اتصل بنا</a>
             <a className="btn btn-link text-white-50" href="">خدماتنا</a>
